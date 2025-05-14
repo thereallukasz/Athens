@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>gSleep: Engineer Your Edge</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* Tailwind gray-50 */
+        }
+        .hero-gradient {
+            background: linear-gradient(135deg, #4285F4 0%, #34A853 100%); /* Google-inspired gradient */
+        }
+        .cta-button {
+            transition: all 0.3s ease;
+        }
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .feature-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .section-title {
+            position: relative;
+            padding-bottom: 0.5rem; /* 8px */
+        }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px; /* Adjust width as needed */
+            height: 4px; /* Adjust height as needed */
+            background-color: #4285F4; /* Google Blue */
+            border-radius: 2px;
+        }
+        /* Animation for elements appearing on scroll */
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .fade-in-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="antialiased text-gray-800">
+
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center">
+                <svg class="h-8 w-8 text-blue-600 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-6.364-.386l1.591-1.591M3 12H5.25m.386-6.364l1.591 1.591" />
+                </svg>
+                <h1 class="text-2xl font-bold text-gray-800">g<span class="text-blue-600">Sleep</span></h1>
+            </div>
+            <div class="hidden md:flex space-x-6">
+                <a href="#features" class="text-gray-600 hover:text-blue-600 transition duration-300">Features</a>
+                <a href="#advantage" class="text-gray-600 hover:text-blue-600 transition duration-300">The Advantage</a>
+                <a href="#insight" class="text-gray-600 hover:text-blue-600 transition duration-300">Our Insight</a>
+                <a href="#contact" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg cta-button">Pre-Order</a>
+            </div>
+            <div class="md:hidden">
+                <button id="mobile-menu-button" class="text-gray-800 focus:outline-none">
+                    <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <div id="mobile-menu" class="md:hidden hidden bg-white shadow-lg">
+            <a href="#features" class="block px-6 py-3 text-gray-600 hover:bg-gray-100 hover:text-blue-600">Features</a>
+            <a href="#advantage" class="block px-6 py-3 text-gray-600 hover:bg-gray-100 hover:text-blue-600">The Advantage</a>
+            <a href="#insight" class="block px-6 py-3 text-gray-600 hover:bg-gray-100 hover:text-blue-600">Our Insight</a>
+            <a href="#contact" class="block px-6 py-3 bg-blue-600 text-white hover:bg-blue-700 text-center font-semibold rounded-b-lg">Pre-Order</a>
+        </div>
+    </nav>
+
+    <header class="hero-gradient text-white py-20 md:py-32">
+        <div class="container mx-auto px-6 text-center">
+            <img src="https://placehold.co/150x150/ffffff/4285F4?text=gS" alt="gSleep Logo" class="mx-auto mb-8 rounded-full shadow-xl w-32 h-32 md:w-40 md:h-40" onerror="this.onerror=null;this.src='https://placehold.co/150x150/E0E0E0/B0B0B0?text=Logo+Error';">
+            <h2 class="text-4xl md:text-6xl font-extrabold mb-4 fade-in-up">gSleep: Engineer Your Edge.</h2>
+            <p class="text-lg md:text-2xl mb-8 max-w-3xl mx-auto fade-in-up" style="animation-delay: 0.2s;">
+                For the driven professional, gSleep is more than a mattress—it's your nightly recalibration for peak cognitive performance and stress resilience. Intelligently designed by Google to transform sleep into your most powerful productivity asset.
+            </p>
+            <p class="text-xl md:text-3xl font-semibold mb-12 fade-in-up" style="animation-delay: 0.4s;">
+                Reclaim your nights. Amplify your days. Discover the gSleep advantage.
+            </p>
+            <a href="#contact" class="bg-white text-blue-600 font-bold py-3 px-8 md:py-4 md:px-10 rounded-lg text-lg md:text-xl cta-button hover:bg-gray-100 fade-in-up" style="animation-delay: 0.6s;">
+                Pre-Order gSleep
+            </a>
+        </div>
+    </header>
+
+    <section id="features" class="py-16 md:py-24 bg-white">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-4 section-title fade-in-up">Transform Your Sleep, Elevate Your Performance</h2>
+            <p class="text-center text-gray-600 mb-12 md:mb-16 max-w-2xl mx-auto fade-in-up" style="animation-delay: 0.2s;">
+                gSleep by Google is your nightly recalibration for peak cognitive performance and stress resilience. Its intelligent core learns your unique physiology, dynamically adjusting for optimal deep sleep and strategic recovery.
+            </p>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-gray-50 p-8 rounded-xl shadow-lg feature-card fade-in-up" style="animation-delay: 0.3s;">
+                    <div class="flex items-center justify-center h-16 w-16 rounded-full bg-blue-100 text-blue-600 mb-6 mx-auto">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.646.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 1.655c.007.379.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.333.183-.582.495-.645.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.759 6.759 0 010-1.655c-.007-.379-.137-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-3 text-center">Intelligent Core</h3>
+                    <p class="text-gray-600 text-center">Learns your unique physiology and sleep patterns to provide personalized comfort and support.</p>
+                </div>
+                <div class="bg-gray-50 p-8 rounded-xl shadow-lg feature-card fade-in-up" style="animation-delay: 0.4s;">
+                    <div class="flex items-center justify-center h-16 w-16 rounded-full bg-green-100 text-green-600 mb-6 mx-auto">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-3 text-center">Dynamic Adjustment</h3>
+                    <p class="text-gray-600 text-center">Actively adapts throughout the night for optimal deep sleep cycles and strategic muscle recovery.</p>
+                </div>
+                <div class="bg-gray-50 p-8 rounded-xl shadow-lg feature-card fade-in-up" style="animation-delay: 0.5s;">
+                     <div class="flex items-center justify-center h-16 w-16 rounded-full bg-yellow-100 text-yellow-600 mb-6 mx-auto">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-3 text-center">Enhanced Focus</h3>
+                    <p class="text-gray-600 text-center">Wake with renewed mental clarity and the sustained energy to conquer your demanding days.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="advantage" class="py-16 md:py-24 bg-gray-100">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-8 md:mb-0 md:pr-12 fade-in-up">
+                    <img src="Whisk_425dfe8cc8 (2).jpg" alt="gSleep Mattress with person sleeping comfortably" class="rounded-xl shadow-2xl w-full" onerror="this.onerror=null;this.src='https://placehold.co/600x400/E0E0E0/B0B0B0?text=Image+Error';">
+                </div>
+                <div class="md:w-1/2 md:pl-12 fade-in-up" style="animation-delay: 0.2s;">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-6 section-title text-left md:text-left" style="margin-left:0; transform: none;">The gSleep Advantage</h2>
+                     <p class="text-gray-600 mb-4 text-lg">
+                        gSleep isn't just about sleeping; it's about strategic recovery. We understand that for high-achievers, rest is a crucial component of success.
+                    </p>
+                    <ul class="space-y-3 text-gray-600">
+                        <li class="flex items-start">
+                            <svg class="w-6 h-6 text-green-500 mr-3 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                            <span><strong>Peak Cognitive Performance:</strong> Sharpen focus, enhance memory, and boost problem-solving skills.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-6 h-6 text-green-500 mr-3 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                            <span><strong>Stress Resilience:</strong> Improve your body's ability to manage stress and prevent burnout.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-6 h-6 text-green-500 mr-3 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                            <span><strong>Sustained Energy:</strong> Wake up feeling genuinely refreshed and ready to tackle your ambitious goals.</span>
+                        </li>
+                         <li class="flex items-start">
+                            <svg class="w-6 h-6 text-green-500 mr-3 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                            <span><strong>Data-Driven Insights:</strong> Understand your sleep like never before with personalized reports (optional app integration concept).</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="insight" class="py-16 md:py-24 bg-white">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4 section-title fade-in-up">Fueling Your Drive to Outperform</h2>
+            <div class="max-w-3xl mx-auto fade-in-up" style="animation-delay: 0.2s;">
+                <svg class="w-16 h-16 text-blue-500 mx-auto mb-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                <p class="text-xl md:text-2xl text-gray-700 italic leading-relaxed">
+                    "For Stressed, Affluent Professionals, sleep is not a passive retreat but an active, non-negotiable strategy for maintaining their critical competitive edge and fueling their drive to outperform."
+                </p>
+                <p class="mt-6 text-gray-600">
+                    gSleep is engineered with this precise understanding. It's more than comfort; it's a strategic tool designed to integrate seamlessly into your high-performance lifestyle.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="py-16 md:py-24 hero-gradient text-white">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold mb-6 fade-in-up">Ready to Engineer Your Edge?</h2>
+            <p class="text-lg md:text-xl mb-10 max-w-2xl mx-auto fade-in-up" style="animation-delay: 0.2s;">
+                Be among the first to experience the gSleep revolution. Pre-order yours today and transform your sleep into your most powerful productivity asset.
+            </p>
+            <form class="max-w-xl mx-auto fade-in-up" style="animation-delay: 0.4s;">
+                <div class="flex flex-col sm:flex-row gap-4 mb-6">
+                    <input type="text" placeholder="Full Name" class="flex-grow p-3 rounded-lg text-gray-800 focus:ring-2 focus:ring-blue-300 focus:outline-none" required>
+                    <input type="email" placeholder="Email Address" class="flex-grow p-3 rounded-lg text-gray-800 focus:ring-2 focus:ring-blue-300 focus:outline-none" required>
+                </div>
+                <button type="submit" class="bg-white text-blue-600 font-bold py-3 px-10 rounded-lg text-lg hover:bg-gray-100 cta-button w-full sm:w-auto">
+                    Pre-Order Now
+                </button>
+            </form>
+             <p class="text-sm mt-8 text-blue-100 fade-in-up" style="animation-delay: 0.6s;">We respect your privacy. Pre-ordering expresses interest; no payment required now.</p>
+        </div>
+    </section>
+
+    <footer class="bg-gray-800 text-gray-400 py-12">
+        <div class="container mx-auto px-6 text-center">
+            <div class="mb-4">
+                <a href="#" class="px-3 hover:text-white">About Us</a>
+                <a href="#" class="px-3 hover:text-white">Privacy Policy</a>
+                <a href="#" class="px-3 hover:text-white">Terms of Service</a>
+                <a href="#" class="px-3 hover:text-white">Contact</a>
+            </div>
+            <p>&copy; <span id="currentYear"></span> gSleep by Google. All Rights Reserved.</p>
+            <p class="text-sm">Designed to help you achieve more.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle logic
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        if (mobileMenuButton && mobileMenu) {
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+
+        // Set current year in footer
+        const currentYearElement = document.getElementById('currentYear');
+        if (currentYearElement) {
+            currentYearElement.textContent = new Date().getFullYear();
+        }
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                // Ensure targetId is not just "#"
+                if (targetId && targetId.length > 1) {
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                        // Close mobile menu if open and it's a link within the page
+                        if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+                            mobileMenu.classList.add('hidden');
+                        }
+                    }
+                }
+            });
+        });
+
+        // Fade-in on scroll animation logic
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 }); // Trigger when 10% of the element is visible
+
+        document.querySelectorAll('.fade-in-up').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Simple form submission handling (for demonstration)
+        const contactForm = document.querySelector('#contact form');
+        if (contactForm) {
+            contactForm.addEventListener('submit', function(e) {
+                e.preventDefault(); // Prevent actual form submission
+                
+                // Create and display a custom success message box
+                const messageBox = document.createElement('div');
+                messageBox.style.position = 'fixed';
+                messageBox.style.top = '20px';
+                messageBox.style.left = '50%';
+                messageBox.style.transform = 'translateX(-50%)';
+                messageBox.style.backgroundColor = '#4CAF50'; // Green background
+                messageBox.style.color = 'white';
+                messageBox.style.padding = '15px 25px';
+                messageBox.style.borderRadius = '8px';
+                messageBox.style.zIndex = '1000'; // Ensure it's on top
+                messageBox.style.boxShadow = '0 4px 15px rgba(0,0,0,0.2)';
+                messageBox.textContent = 'Thank you for your interest! We will be in touch.';
+                document.body.appendChild(messageBox);
+
+                // Automatically remove the message box after a few seconds
+                setTimeout(() => {
+                    messageBox.style.transition = 'opacity 0.5s ease-out';
+                    messageBox.style.opacity = '0'; // Fade out
+                    setTimeout(() => {
+                        if (document.body.contains(messageBox)) {
+                             document.body.removeChild(messageBox);
+                        }
+                    }, 500); // Remove from DOM after fade out
+                }, 3000); // Message visible for 3 seconds
+
+                contactForm.reset(); // Clear the form fields
+            });
+        }
+    </script>
+
+</body>
+</html>
