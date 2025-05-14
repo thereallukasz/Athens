@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Athens Adventure Quiz</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8; /* Light blue-grey background */
+        }
+        .quiz-container {
+            background-color: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease-in-out;
+        }
+        .quiz-container:hover {
+            transform: translateY(-5px);
+        }
+        .answer-option {
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        .answer-option:hover {
+            border-color: #60a5fa; /* Light blue border on hover */
+            transform: translateX(5px);
+        }
+        .answer-option.selected {
+            border-color: #3b82f6; /* Darker blue for selected */
+            background-color: #eff6ff; /* Very light blue for selected */
+        }
+        .answer-option.correct {
+            background-color: #d1fae5; /* Light green for correct */
+            border-color: #10b981; /* Green border */
+        }
+        .answer-option.incorrect {
+            background-color: #fee2e2; /* Light red for incorrect */
+            border-color: #ef4444; /* Red border */
+        }
+        .btn-primary {
+            background-color: #3b82f6; /* Blue */
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: #2563eb; /* Darker blue */
+        }
+        .btn-secondary {
+            background-color: #6b7280; /* Grey */
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+        .btn-secondary:hover {
+            background-color: #4b5563; /* Darker grey */
+        }
+        .progress-bar-bg {
+            background-color: #e5e7eb; /* Light grey for progress bar bg */
+        }
+        .progress-bar-fill {
+            background-color: #3b82f6; /* Blue for progress fill */
+            transition: width 0.5s ease-in-out;
+        }
+        .hint-text, .rationale-text {
+            background-color: #f9fafb; /* Very light grey for hint/rationale bg */
+            border-left: 4px solid #60a5fa; /* Blue accent border */
+        }
+        /* Custom font for title to give a slightly more "epic" feel */
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Inter:wght@400;500;700&display=swap');
+        .quiz-title {
+            font-family: 'Cinzel', serif;
+            color: #1e3a8a; /* Dark blue for title */
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4 bg-gradient-to-br from-blue-500 to-indigo-600">
+
+    <div id="quiz-app" class="quiz-container w-full max-w-2xl p-6 md:p-8">
+        <h1 class="quiz-title text-3xl md:text-4xl font-bold text-center mb-6">Athens Adventure Quiz</h1>
+
+        <div id="progress-container" class="mb-4">
+            <p id="progress-text" class="text-sm text-gray-600 text-center mb-1">Question 1 of 10</p>
+            <div class="progress-bar-bg w-full h-2 rounded-full">
+                <div id="progress-bar" class="progress-bar-fill h-2 rounded-full" style="width: 0%;"></div>
+            </div>
+        </div>
+
+        <div id="question-container" class="mb-6">
+            <p id="question-text" class="text-xl md:text-2xl font-semibold text-gray-800 mb-4 text-center"></p>
+            <div id="answer-options" class="space-y-3">
+                </div>
+        </div>
+
+        <div id="feedback-container" class="mb-4 min-h-[60px]">
+            <p id="hint-text" class="hint-text p-3 rounded-md text-sm text-gray-700 mt-2 hidden"></p>
+            <p id="rationale-text" class="rationale-text p-3 rounded-md text-sm text-gray-700 mt-2 hidden"></p>
+        </div>
+
+        <div id="navigation-buttons" class="flex flex-col sm:flex-row justify-between items-center space-y-3 sm:space-y-0 sm:space-x-3">
+            <button id="hint-button" class="btn-secondary w-full sm:w-auto py-2 px-4 rounded-lg font-medium">Show Hint</button>
+            <button id="next-button" class="btn-primary w-full sm:w-auto py-2 px-4 rounded-lg font-medium hidden">Next Question</button>
+        </div>
+
+        <div id="results-container" class="text-center hidden">
+            <h2 class="text-2xl font-bold text-gray-800 mb-3">Quiz Completed!</h2>
+            <p id="score-text" class="text-xl text-gray-700 mb-6"></p>
+            <button id="restart-button" class="btn-primary py-3 px-6 rounded-lg font-semibold text-lg">Play Again?</button>
+        </div>
+    </div>
+
+    <script>
+        // --- Quiz Data (JSON embedded directly) ---
+        const quizData = {
+          "questions": [
+            {
+              "question": "The top floor of the Acropolis Museum, the stunning Parthenon Gallery, isn't just randomly oriented. What is truly special about its alignment and dimensions?",
+              "answerOptions": [
+                { "text": "It's aligned perfectly with the North Star for ancient navigation rituals.", "rationale": "While ancient Greeks were skilled navigators, the gallery's primary design focus is its direct relationship to the Parthenon monument itself.", "isCorrect": false },
+                { "text": "It has the exact same dimensions and orientation as the Parthenon itself, allowing the frieze to be displayed as it once was, with natural light.", "rationale": "The gallery's design thoughtfully mirrors the Parthenon, enhancing the viewing experience of its sculptures in a context similar to their original setting.", "isCorrect": true },
+                { "text": "Its dimensions are based on the Golden Ratio, multiplied by the age of Pericles when construction began.", "rationale": "The Golden Ratio was indeed significant in Greek architecture, but this specific calculation for the gallery's dimensions is not its defining feature.", "isCorrect": false },
+                { "text": "It's tilted at an angle to represent the seismic shift that damaged the original Parthenon.", "rationale": "The museum's architectural design prioritizes the optimal display of the Parthenon's artifacts, rather than replicating historical damage to the monument.", "isCorrect": false }
+              ],
+              "hint": "Consider how the museum aims to connect the artifacts you see inside with the actual monument visible nearby."
+            },
+            {
+              "question": "The colossal statue of Athena Parthenos that once stood inside the Parthenon was a marvel of gold and ivory. Roughly how much gold was said to have been used in its creation, making it a significant treasury for Athens?",
+              "answerOptions": [
+                { "text": "About 10 kilograms (22 pounds)", "rationale": "This quantity of gold would be valuable, but it significantly underestimates the immense scale and opulence of this iconic chryselephantine statue.", "isCorrect": false },
+                { "text": "About 100 kilograms (220 pounds)", "rationale": "While a substantial sum, this figure still falls short of reflecting the true weight of gold used, which also represented a significant portion of the city's wealth.", "isCorrect": false },
+                { "text": "Over 1,000 kilograms (around 1,140 kg or 44 talents – over 2,500 pounds!)", "rationale": "This very large amount of gold underscores the statue's importance not only as a religious icon but also as a major financial reserve for ancient Athens.", "isCorrect": true },
+                { "text": "The statue was bronze, with only gold accents.", "rationale": "The Athena Parthenos was famously a chryselephantine statue, meaning it was primarily constructed from gold and ivory, not bronze.", "isCorrect": false }
+              ],
+              "hint": "This statue was not only a dedication to the goddess but also a symbol of Athens' power and a substantial part of its financial reserves."
+            },
+            {
+              "question": "The Erechtheion temple on the Acropolis is unique for many reasons. It's said to mark the spot of a mythical contest between Athena and another Olympian god for the patronage of Athens. Who was this god, and what did they offer?",
+              "answerOptions": [
+                { "text": "Zeus, who offered thunderbolts and supreme power.", "rationale": "Zeus, as king of the gods, held supreme power but was not the deity who competed with Athena for the patronage of Athens in this particular myth.", "isCorrect": false },
+                { "text": "Apollo, who offered music and prophecy.", "rationale": "Apollo's domains were indeed music and prophecy, but his offering does not align with the traditional narrative of Athens' foundational contest.", "isCorrect": false },
+                { "text": "Poseidon, who struck the rock with his trident to create a saltwater spring (or a horse).", "rationale": "Poseidon, the god of the sea, offered a symbol of naval power, which directly contrasted with Athena's gift related to sustenance and peace.", "isCorrect": true },
+                { "text": "Hermes, who offered commerce and swift messages.", "rationale": "Hermes, the messenger god, is associated with commerce, but he was not the contender against Athena in the mythical contest for Athens.", "isCorrect": false }
+              ],
+              "hint": "The contest involved a gift representing naval might versus one symbolizing peace and prosperity from the land."
+            },
+            {
+              "question": "The Parthenon has survived millennia, but not without incident. One of the most devastating events occurred in 1687 during a war. What was the Parthenon being used for by the Ottomans at that time, leading to a catastrophic explosion?",
+              "answerOptions": [
+                { "text": "A royal observatory for charting the stars.", "rationale": "While ancient cultures valued astronomy, this was not the Parthenon's function during the 17th-century conflict that led to its major damage.", "isCorrect": false },
+                { "text": "A secure granary to store food supplies.", "rationale": "Storing food in such a structure is plausible, but historical accounts indicate a far more volatile substance was housed there during the siege.", "isCorrect": false },
+                { "text": "An ammunition and gunpowder store.", "rationale": "Using fortified ancient structures to store munitions was a common, though perilous, military practice during sieges of that era.", "isCorrect": true },
+                { "text": "A fortified command center for the Ottoman general.", "rationale": "Although located within a fortified citadel, its specific use as a high-command post isn't cited as the direct cause of the devastating explosion.", "isCorrect": false }
+              ],
+              "hint": "Think about the strategic, and often dangerous, military re-purposing of large, ancient buildings during times of war."
+            },
+            {
+              "question": "The Acropolis Museum showcases many artifacts from the slopes of the Acropolis. What kind of everyday items found there give us a glimpse into the lives of ordinary ancient Athenians?",
+              "answerOptions": [
+                { "text": "Golden death masks of ancient priests.", "rationale": "Golden death masks are typically associated with elite or royal burials from other specific ancient cultures (e.g., Mycenaean), not common finds from Athenian residential areas.", "isCorrect": false },
+                { "text": "Clay pottery, children's toys, and loom weights for weaving.", "rationale": "These types of artifacts are characteristic of domestic activities, crafts, and daily life within an ancient community.", "isCorrect": true },
+                { "text": "Royal decrees inscribed on bronze tablets.", "rationale": "Official decrees would typically be displayed in more central public or administrative locations rather than being common in residential slope areas.", "isCorrect": false },
+                { "text": "Elaborate marble thrones for city officials.", "rationale": "Marble thrones would be symbols of high status or divine authority, not everyday objects found in the homes of ordinary citizens.", "isCorrect": false }
+              ],
+              "hint": "Consider items that reflect common household activities and childhood rather than symbols of power or officialdom."
+            },
+            {
+              "question": "The Parthenon Frieze, a 160-meter-long sculpted band, originally ran around the inner chamber's exterior walls. What grand event is it believed to depict?",
+              "answerOptions": [
+                { "text": "The mythical battle between the Gods and Giants (Gigantomachy).", "rationale": "The Gigantomachy was a significant theme in Greek art, often found on temple metopes or pediments, but the continuous narrative style of the frieze suggests a different subject.", "isCorrect": false },
+                { "text": "The founding of Athens by King Theseus.", "rationale": "While Theseus is a crucial figure in Athenian mythology, the frieze's extensive cast of characters points to a broader civic and religious event.", "isCorrect": false },
+                { "text": "The Panathenaic Procession, a grand festival held every four years to honor Athena.", "rationale": "The diverse array of figures, including horsemen, sacrificial animals, and citizens bearing offerings, aligns closely with ancient descriptions of this major Athenian festival.", "isCorrect": true },
+                { "text": "A historical Athenian victory over the Persians.", "rationale": "Although Athenian victories were celebrated, the iconography of the frieze is more consistent with a recurring religious celebration than a specific military triumph.", "isCorrect": false }
+              ],
+              "hint": "The scene features a large number of diverse participants, including cavalry and people bringing offerings, indicative of a major city-wide celebration."
+            },
+            {
+              "question": "Many sculptures from the Acropolis were scattered or buried over centuries. What 19th-century development, following Greek independence, led to the rediscovery of many hidden masterpieces?",
+              "answerOptions": [
+                { "text": "A series of major earthquakes unearthed buried sections.", "rationale": "While earthquakes can incidentally reveal buried items, the systematic uncovering of numerous artifacts was the result of deliberate human action.", "isCorrect": false },
+                { "text": "Systematic archaeological excavations began, clearing away later additions and debris to uncover the classical layers.", "rationale": "The emergence of archaeology as a scientific discipline spurred organized efforts to excavate, study, and preserve ancient sites like the Acropolis.", "isCorrect": true },
+                { "text": "Ancient texts were deciphered, revealing maps to hidden caches of art.", "rationale": "While textual analysis is vital for historical understanding, the discovery process on the Acropolis relied more on excavation than on treasure maps.", "isCorrect": false },
+                { "text": "Local farmers accidentally stumbled upon buried statues while plowing fields.", "rationale": "Occasional accidental discoveries can occur, but the sheer volume of artifacts rediscovered on the Acropolis points to methodical, planned archaeological work.", "isCorrect": false }
+              ],
+              "hint": "Think about the more scientific and organized approach to studying historical sites that gained prominence in the 1800s."
+            },
+            {
+              "question": "The Parthenon is renowned for its architectural brilliance. Who were the two primary architects credited with its design?",
+              "answerOptions": [
+                { "text": "Pheidias and Pericles", "rationale": "Pheidias was the chief sculptor and artistic overseer, while Pericles was the statesman who initiated the Acropolis building program; neither were the architects.", "isCorrect": false },
+                { "text": "Iktinos and Kallikrates", "rationale": "These two individuals are historically documented as the principal architects responsible for the innovative design and construction of the Parthenon.", "isCorrect": true },
+                { "text": "Mnesikles and Skopas", "rationale": "Mnesikles was the architect of the Propylaea, the gateway to the Acropolis, and Skopas was a noted sculptor from a slightly later period.", "isCorrect": false },
+                { "text": "Praxiteles and Lysippos", "rationale": "Praxiteles and Lysippos were highly influential sculptors of the 4th century BC, a later phase of the Classical period.", "isCorrect": false }
+              ],
+              "hint": "One of these individuals was also the master sculptor overseeing the Parthenon's decorations, but he was not the primary architect."
+            },
+            {
+              "question": "Besides its primary religious function as a temple to Athena, the Parthenon also served another crucial civic role for ancient Athens. What was it?",
+              "answerOptions": [
+                { "text": "The city's main library", "rationale": "While Athens valued learning and had libraries, the Parthenon's key secondary function was financial and strategic.", "isCorrect": false },
+                { "text": "The meeting place for the Athenian Assembly (Ekklesia)", "rationale": "The Athenian democratic assembly typically convened on the Pnyx hill, not within the Parthenon.", "isCorrect": false },
+                { "text": "The treasury, housing the funds of the Delian League and Athens", "rationale": "The Parthenon safeguarded the immense wealth of Athens and the Delian League, making it a vital economic and political center.", "isCorrect": true },
+                { "text": "A school for young philosophers", "rationale": "Philosophical education and discourse occurred in various public spaces like the Agora, but the Parthenon was not a formal school.", "isCorrect": false }
+              ],
+              "hint": "Consider where a powerful ancient city-state might secure its most valuable collective assets."
+            },
+            {
+              "question": "The Erechtheion temple features the famous 'Porch of the Maidens.' What is the architectural term for these sculpted female figures used as supporting columns?",
+              "answerOptions": [
+                { "text": "Atlantes", "rationale": "Atlantes (or Telamones) are sculpted male figures used as architectural supports, contrasting with the female figures of the Erechtheion.", "isCorrect": false },
+                { "text": "Caryatids", "rationale": "This is the precise architectural term for a sculpted female figure serving in place of a column or pillar to support an entablature.", "isCorrect": true },
+                { "text": "Kouroi", "rationale": "Kouroi are free-standing Archaic Greek statues representing nude male youths, not architectural supports.", "isCorrect": false },
+                { "text": "Korai", "rationale": "Korai are free-standing Archaic Greek statues representing draped female youths; while female, they are distinct from Caryatids in their function.", "isCorrect": false }
+              ],
+              "hint": "One of the other options refers to male figures used as columns; these are their female counterparts."
+            }
+          ]
+        };
+
+        // --- DOM Elements ---
+        const questionTextElement = document.getElementById('question-text');
+        const answerOptionsElement = document.getElementById('answer-options');
+        const hintButton = document.getElementById('hint-button');
+        const hintTextElement = document.getElementById('hint-text');
+        const rationaleTextElement = document.getElementById('rationale-text');
+        const nextButton = document.getElementById('next-button');
+        const resultsContainer = document.getElementById('results-container');
+        const scoreTextElement = document.getElementById('score-text');
+        const restartButton = document.getElementById('restart-button');
+        const progressTextElement = document.getElementById('progress-text');
+        const progressBarElement = document.getElementById('progress-bar');
+        const questionContainer = document.getElementById('question-container');
+        const navigationButtons = document.getElementById('navigation-buttons');
+
+        // --- Quiz State ---
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let answerSelected = false;
+
+        // --- Functions ---
+
+        // Function to shuffle array (Fisher-Yates shuffle)
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        // Function to load and display a question
+        function loadQuestion() {
+            answerSelected = false;
+            const currentQuestion = quizData.questions[currentQuestionIndex];
+            questionTextElement.textContent = currentQuestion.question;
+            answerOptionsElement.innerHTML = ''; // Clear previous options
+            hintTextElement.classList.add('hidden');
+            hintTextElement.textContent = '';
+            rationaleTextElement.classList.add('hidden');
+            rationaleTextElement.textContent = '';
+            nextButton.classList.add('hidden');
+            hintButton.classList.remove('hidden');
+            hintButton.disabled = false;
+
+            // Shuffle answer options for variety
+            const shuffledOptions = [...currentQuestion.answerOptions];
+            shuffleArray(shuffledOptions);
+
+            shuffledOptions.forEach(option => {
+                const button = document.createElement('button');
+                button.textContent = option.text;
+                button.classList.add('answer-option', 'w-full', 'text-left', 'p-4', 'rounded-lg', 'border-2', 'border-gray-200', 'hover:bg-blue-50', 'focus:outline-none', 'focus:ring-2', 'focus:ring-blue-300');
+                button.onclick = () => selectAnswer(button, option, currentQuestion.answerOptions);
+                answerOptionsElement.appendChild(button);
+            });
+            updateProgress();
+        }
+
+        // Function to handle answer selection
+        function selectAnswer(selectedButton, selectedOption, allOptionsForQuestion) {
+            if (answerSelected) return; // Prevent multiple selections
+            answerSelected = true;
+            hintButton.disabled = true; // Disable hint after an answer is selected
+
+            // Find the original, un-shuffled correct option to get its rationale
+            const correctOptionData = allOptionsForQuestion.find(opt => opt.isCorrect);
+
+            // Style all buttons based on correctness
+            Array.from(answerOptionsElement.children).forEach(button => {
+                const optionText = button.textContent;
+                // Find the data for this button from the original options to check correctness
+                const buttonOptionData = allOptionsForQuestion.find(opt => opt.text === optionText);
+
+                if (buttonOptionData.isCorrect) {
+                    button.classList.add('correct');
+                } else {
+                    button.classList.add('incorrect');
+                }
+                button.disabled = true; // Disable all options
+            });
+            
+            // Highlight the selected button
+            selectedButton.classList.add('selected');
+
+
+            // Display rationale for the selected option
+            rationaleTextElement.textContent = `Rationale: ${selectedOption.rationale}`;
+            rationaleTextElement.classList.remove('hidden');
+
+
+            if (selectedOption.isCorrect) {
+                score++;
+            }
+
+            nextButton.classList.remove('hidden');
+        }
+
+        // Function to show hint
+        hintButton.onclick = () => {
+            const currentQuestion = quizData.questions[currentQuestionIndex];
+            hintTextElement.textContent = `Hint: ${currentQuestion.hint}`;
+            hintTextElement.classList.remove('hidden');
+            hintButton.disabled = true; // Disable after showing once
+        };
+
+        // Function to go to the next question or show results
+        nextButton.onclick = () => {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < quizData.questions.length) {
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        };
+
+        // Function to update progress bar and text
+        function updateProgress() {
+            progressTextElement.textContent = `Question ${currentQuestionIndex + 1} of ${quizData.questions.length}`;
+            const progressPercentage = ((currentQuestionIndex + 1) / quizData.questions.length) * 100;
+            progressBarElement.style.width = `${progressPercentage}%`;
+        }
+
+        // Function to show final results
+        function showResults() {
+            questionContainer.classList.add('hidden');
+            navigationButtons.classList.add('hidden');
+            resultsContainer.classList.remove('hidden');
+            hintTextElement.classList.add('hidden');
+            rationaleTextElement.classList.add('hidden');
+            document.getElementById('progress-container').classList.add('hidden');
+
+
+            let message = "";
+            const percentage = (score / quizData.questions.length) * 100;
+            if (percentage === 100) {
+                message = "Perfect score! You're an Acropolis expert! 🏛️✨";
+            } else if (percentage >= 70) {
+                message = "Great job! You know your Athens history well! 👍";
+            } else if (percentage >= 50) {
+                message = "Good effort! You're on your way to becoming an expert. 😊";
+            } else {
+                message = "Keep learning! The Acropolis has many wonders to discover. 📚";
+            }
+            scoreTextElement.innerHTML = `You scored ${score} out of ${quizData.questions.length}!<br>${message}`;
+        }
+
+        // Function to restart the quiz
+        restartButton.onclick = () => {
+            currentQuestionIndex = 0;
+            score = 0;
+            resultsContainer.classList.add('hidden');
+            questionContainer.classList.remove('hidden');
+            navigationButtons.classList.remove('hidden');
+            hintButton.disabled = false;
+            document.getElementById('progress-container').classList.remove('hidden');
+            loadQuestion();
+        };
+
+        // --- Initial Load ---
+        loadQuestion();
+    </script>
+</body>
+</html>
